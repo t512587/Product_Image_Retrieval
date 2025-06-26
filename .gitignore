@@ -1,0 +1,34 @@
+# Python 快取與編譯檔案
+__pycache__/
+*.py[cod]
+*.so
+
+# 模型與權重檔案
+*.pt
+*.pth
+*.onnx
+*.ckpt
+*.h5
+
+# 測試圖片 / 資料集
+*.jpg
+*.png
+*.jpeg
+*.gif
+output_images/
+test_img/
+query_img/
+data_base_img/
+yolo_weight/
+
+# VSCode 設定
+.vscode/
+
+# 虛擬環境與安裝設定
+.env
+env/
+venv/
+*.yaml
+
+# Jupyter 快取
+.ipynb_checkpoints/
