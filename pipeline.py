@@ -18,22 +18,17 @@ def find_image_file(image_dir, base_filename):
 
 
 class ImageRetrievalPipeline:
-    """整合所有組件 (YOLO版本)"""
-
     def __init__(self, config):
         self.config = config
-
-        # 初始化各組件
         self.model_manager = ModelManager(config.MODEL_NAME, config.DEVICE)
-        self.database_builder = DatabaseBuilder(self.model_manager)
+        self.database_builder = DatabaseBuilder(self.model_manager, patch_mode=config.PATCH_MODE)
         self.yolo_parser = YOLOParser()
-        self.retriever = ImageRetriever(self.model_manager)
+        self.retriever = ImageRetriever(self.model_manager, patch_mode=config.PATCH_MODE)
         self.visualizer = Visualizer(config.FONT_PATH, config.FONT_SIZE)
 
         self.feature_db, self.name_db, self.label_db = None, None, None
-
+    
     def build_database(self):
-        """建立特徵資料庫"""
         print("📦 正在建立資料庫特徵...")
         self.feature_db, self.name_db, self.label_db = \
             self.database_builder.build_feature_database(self.config.DATABASE_DIR)
@@ -136,11 +131,16 @@ class ImageRetrievalPipeline:
         elif isinstance(image_input, Image.Image):
             filename = os.path.basename(getattr(image_input, 'filename', "unknown.jpg"))
             try:
-                processed_img = remove_bg_return_pil(image_input.filename) if remove_bg and hasattr(image_input, 'filename') else image_input.convert("RGB")
+                if remove_bg:
+                    # 不管有沒有 filename，直接用圖片物件去背
+                    processed_img = remove_bg_return_pil(image_input)
+                else:
+                    processed_img = image_input.convert("RGB")
             except Exception as e:
                 print(f"[錯誤] 去背失敗，改用原圖: {e}")
                 processed_img = image_input.convert("RGB")
             original_img = image_input.convert("RGB")
+
         else:
             raise ValueError("image_input 必須是檔案路徑或 PIL.Image")
 
