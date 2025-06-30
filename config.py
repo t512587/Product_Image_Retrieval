@@ -5,7 +5,7 @@ class Config:
     
     # 資料夾路徑
     IMAGE_DIR = "query_img"
-    DATABASE_DIR = "data_base_img"
+    DATABASE_DIR = "data_base_img_yolo_crop"
     OUTPUT_DIR = "output_images"
 
     
@@ -18,8 +18,8 @@ class Config:
     DEVICE = "cuda"  # 或 "cpu"
     
     # 檢索設定
-    TOP_K = 3
-    
+    TOP_K = 10
+    PATCH_MODE = True
     # 標籤字典
     ID2LABEL = {
         1: "奇多家常", 2: "樂事瑞士", 3: "樂事九州", 4: "樂事湖鹽", 5: "奇多兩倍",
